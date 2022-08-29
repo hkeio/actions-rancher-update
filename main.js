@@ -27,7 +27,8 @@ async function main() {
   const PROJECT_ID = core.getInput("project_id", { required: true });
   const STACK_NAME = core.getInput("stack_name", { required: true });
   const SERVICE_NAME = core.getInput("service_name", { required: true });
-  const START_FIRST = core.getInput("start_first", { required: false });
+  const START_FIRST =
+    core.getInput("start_first", { required: false }) ?? "true";
   const DOCKER_IMAGE = core.getInput("docker_image", { required: true });
 
   const rancherApi = request.defaults({
@@ -60,7 +61,7 @@ async function main() {
   }
   const { id, launchConfig } = service.data[0];
   launchConfig.imageUuid = `docker:${DOCKER_IMAGE}`;
-  const startFirst = START_FIRST !== "true" ? false : true;
+  const startFirst = START_FIRST === "true" ? true : false;
 
   // Upgrade
   const body = {
