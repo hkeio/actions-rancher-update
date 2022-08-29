@@ -27,8 +27,7 @@ async function main() {
   const PROJECT_ID = core.getInput("project_id", { required: true });
   const STACK_NAME = core.getInput("stack_name", { required: true });
   const SERVICE_NAME = core.getInput("service_name", { required: true });
-  const START_FIRST =
-    core.getInput("start_first", { required: false }) ?? "true";
+  const START_FIRST = core.getInput("start_first", { required: false });
   const DOCKER_IMAGE = core.getInput("docker_image", { required: true });
 
   const rancherApi = request.defaults({
@@ -71,6 +70,7 @@ async function main() {
     },
   };
   console.log("body:", body);
+  console.log("START_FIRST", START_FIRST, typeof START_FIRST);
   await rancherApi.post(`/service/${id}?action=upgrade`, { body });
   console.log("Waiting for upgrade ...");
   await waitForState("upgraded", rancherApi, id);
