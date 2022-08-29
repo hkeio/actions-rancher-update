@@ -70,7 +70,6 @@ async function main() {
       startFirst,
     },
   };
-  console.log("body:", body);
   await rancherApi.post(`/service/${id}?action=upgrade`, { body });
   console.log("Waiting for upgrade ...");
   await waitForState("upgraded", rancherApi, id);
