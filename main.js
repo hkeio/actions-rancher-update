@@ -60,7 +60,8 @@ async function main() {
   }
   const { id, launchConfig } = service.data[0];
   launchConfig.imageUuid = `docker:${DOCKER_IMAGE}`;
-  const startFirst = START_FIRST === "true" ? true : false;
+  const startFirst =
+    START_FIRST.length === 0 || START_FIRST === "true" ? true : false;
 
   // Upgrade
   const body = {
@@ -70,7 +71,6 @@ async function main() {
     },
   };
   console.log("body:", body);
-  console.log("START_FIRST", START_FIRST, typeof START_FIRST);
   await rancherApi.post(`/service/${id}?action=upgrade`, { body });
   console.log("Waiting for upgrade ...");
   await waitForState("upgraded", rancherApi, id);
