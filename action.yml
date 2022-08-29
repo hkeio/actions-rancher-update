@@ -22,6 +22,9 @@ inputs:
   service_name:
     description: Name of the service which should be updated
     required: true
+  upgrade_strategy:
+    description: Defines if services should start before being stopped
+    required: false
   docker_image:
     description: Name of the docker image which is used for updating
     required: true
