@@ -6,8 +6,8 @@ main().catch(handleError);
 
 const sleep = (sec) =>
   new Promise((resolve) => setTimeout(resolve, sec * 1000));
-const waitForState = async (waitFor, rancherApi, id) => {
-  let retry = 10;
+const waitForState = async (waitFor, rancherApi, id, retries) => {
+  let retry = retries === undefined ? 10 : retries;
   let state = "";
   while (state !== waitFor && retry > 0) {
     state = (await rancherApi.get(`/services/${id}`)).state;
@@ -28,6 +28,7 @@ async function main() {
   const STACK_NAME = core.getInput("stack_name", { required: true });
   const SERVICE_NAME = core.getInput("service_name", { required: true });
   const START_FIRST = core.getInput("start_first", { required: false });
+  const UPGRADE_RETRIES = core.getInput("retries", { required: false });
   const DOCKER_IMAGE = core.getInput("docker_image", { required: true });
 
   const rancherApi = request.defaults({
@@ -62,6 +63,8 @@ async function main() {
   launchConfig.imageUuid = `docker:${DOCKER_IMAGE}`;
   const startFirst =
     START_FIRST.length === 0 || START_FIRST === "true" ? true : false;
+  const upgradeRetries =
+    UPGRADE_RETRIES.length === 0 ? undefined : parseInt(UPGRADE_RETRIES);
 
   // Upgrade
   const body = {
@@ -72,7 +75,7 @@ async function main() {
   };
   await rancherApi.post(`/service/${id}?action=upgrade`, { body });
   console.log("Waiting for upgrade ...");
-  await waitForState("upgraded", rancherApi, id);
+  await waitForState("upgraded", rancherApi, id, upgradeRetries);
 
   // Finish upgrade
   await rancherApi.post(`/service/${id}?action=finishupgrade`);
