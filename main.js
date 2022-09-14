@@ -28,7 +28,7 @@ async function main() {
   const STACK_NAME = core.getInput("stack_name", { required: true });
   const SERVICE_NAME = core.getInput("service_name", { required: true });
   const START_FIRST = core.getInput("start_first", { required: false });
-  const UPGRADE_RETRIES = core.getInput("retries", { required: false });
+  const UPGRADE_RETRIES = core.getInput("upgrade_retries", { required: false });
   const DOCKER_IMAGE = core.getInput("docker_image", { required: true });
 
   const rancherApi = request.defaults({

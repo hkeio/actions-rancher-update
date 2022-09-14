@@ -26,4 +26,5 @@ jobs:
           service_name: test-service
           start_first: true
           docker_image: sekassel-research/test-image:latest
+          upgrade_retries: 20
 ```
