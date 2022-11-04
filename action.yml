@@ -36,5 +36,5 @@ output:
     description: Boolean which indicates if the action was successful or not
 
 runs:
-  using: node12
+  using: node16
   main: main.js
